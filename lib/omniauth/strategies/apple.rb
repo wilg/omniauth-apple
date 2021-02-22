@@ -39,7 +39,9 @@ module OmniAuth
       end
 
       def authorize_params
-        super.merge(nonce: new_nonce)
+        x = super.merge(nonce: new_nonce)
+        puts "omniauth-apple authorize_params #{x.inspect}"
+        x
       end
 
       def callback_url
@@ -72,6 +74,8 @@ module OmniAuth
                        verify_nonce!(payload)
                        payload
                      end
+        puts "omniauth-apple id_info #{@id_info}"
+        @id_info
       end
 
       def fetch_jwks
@@ -97,10 +101,14 @@ module OmniAuth
       end
 
       def user_info
+
         user = request.params['user']
         return {} if user.nil?
 
         @user_info ||= JSON.parse(user)
+
+        puts "omniauth-apple id_info #{@user_info.inspect}"
+        @user_info
       end
 
       def email
